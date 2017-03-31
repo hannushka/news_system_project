@@ -19,6 +19,10 @@ void writeNumber(const Connection& conn, int value) {
 	conn.write(value & 0xFF);
 }
 
+void write_string(const Connection& conn, string s) {
+	conn.write('b');
+}
+
 /*
  * Read a string from the server.
  */
@@ -51,15 +55,20 @@ int main(int argc, char* argv[]) {
 		exit(1);
 	}
 	
-	cout << "Type a number: ";
-	int nbr;
-	while (cin >> nbr) {
+	cout << "Type a command: ";
+	string line;
+	while (getline(cin, line)) {
 		try {
-			cout << nbr << " is ...";
+			cout << line << endl;
+
+			if (line == "ls") {
+				write_string(conn, line);
+			}
+			/*cout << nbr << " is ...";
 			writeNumber(conn, nbr);
 			string reply = readString(conn);
 			cout << " " << reply << endl;
-			cout << "Type another number: ";
+			cout << "Type another number: ";*/
 		} catch (ConnectionClosedException&) {
 			cout << " no reply from server. Exiting." << endl;
 			exit(1);
