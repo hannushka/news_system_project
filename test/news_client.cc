@@ -59,16 +59,12 @@ int main(int argc, char* argv[]) {
 	string line;
 	while (getline(cin, line)) {
 		try {
-			cout << line << endl;
-
 			if (line == "ls") {
 				write_string(conn, line);
 			}
-			/*cout << nbr << " is ...";
-			writeNumber(conn, nbr);
 			string reply = readString(conn);
-			cout << " " << reply << endl;
-			cout << "Type another number: ";*/
+			cout << "Type a new command: ";
+
 		} catch (ConnectionClosedException&) {
 			cout << " no reply from server. Exiting." << endl;
 			exit(1);
