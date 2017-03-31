@@ -8,8 +8,8 @@ CC  = g++
 # if you use clang++ and wish to use libc++ instead of libstd++.
 CPPFLAGS  = -std=c++11 -I..
 CXXFLAGS  = -g -O2 -Wall -W -pedantic-errors
-CXXFLAGS += -Wmissing-braces -Wparentheses -Wold-style-cast 
-CXXFLAGS += -std=c++11 
+CXXFLAGS += -Wmissing-braces -Wparentheses -Wold-style-cast
+CXXFLAGS += -std=c++11
 LDFLAGS   = -g -L..
 #CPPFLAGS += -stdlib=libc++
 #CXXFLAGS += -stdlib=libc++
@@ -19,14 +19,16 @@ LDFLAGS   = -g -L..
 LDLIBS = -lclientserver
 
 # Targets
-PROGS = myserver myclient
+PROGS = myserver myclient news_server news_client
 
 all: $(PROGS)
 
 # Targets rely on implicit rules for compiling and linking
 # The dependency on libclientserver.a is not defined.
-myserver: myserver.o  
+myserver: myserver.o
 myclient: myclient.o
+news_server: news_server.o
+news_client: news_client.o
 
 # Phony targets
 .PHONY: all clean
