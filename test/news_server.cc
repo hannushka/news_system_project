@@ -1,14 +1,12 @@
-#include "server.h"
-#include "connection.h"
-#include "connectionclosedexception.h"
-
-#include <memory>
-#include <iostream>
-#include <string>
-#include <stdexcept>
-#include <cstdlib>
+#include "news_server.h"
 
 using namespace std;
+
+void list_newsgroups(std::shared_ptr<Connection> conn) {
+	conn->write(Protocol::ANS_LIST_NG);
+	conn->write('0');
+	conn->write(Protocol::ANS_END);
+}
 
 int main(int argc, char* argv[]){
 	if (argc != 2) {
@@ -35,7 +33,11 @@ int main(int argc, char* argv[]){
 		if (conn != nullptr) {
 			try {
 				char c = conn->read();
-				conn->write(c);
+				switch (c) {
+					case Protocol::COM_LIST_NG: list_newsgroups(conn);
+					break;
+					default: conn->write('-');
+				}
 			} catch (ConnectionClosedException&) {
 				server.deregisterConnection(conn);
 				cout << "Client closed connection" << endl;
