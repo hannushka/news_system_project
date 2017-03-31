@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
 			getline(cin, line);
 			auto space = line.find(' ');
 			string first_word = line.substr(0, space);
-			
+
 			if (first_word == "ls") {
 				conn.write(Protocol::COM_LIST_NG);
 				conn.write(Protocol::COM_END);
@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
 				/*string name = line.substr(space + 1, string::npos);
 				cout << Protocol::COM_CREATE_NG << " " << Protocol::PAR_STRING
 					<< " " << name.size() << " ";
-				for (char c : name) 
+				for (char c : name)
 					cout << c;
 				cout << " " << Protocol::COM_END;*/
 				//End print functions
@@ -61,20 +61,21 @@ int main(int argc, char* argv[]) {
 				conn.write(Protocol::COM_CREATE_NG);
 				conn.write(Protocol::PAR_STRING);
 				conn.write(name.size());
-				for (char c : name) 
+				for (char c : name)
 					conn.write(c);
 				conn.write(Protocol::COM_END);
 			}
-			if (first_word == "d") {
+			/*if (first_word == "d") {
 				if (space == string::npos) {
 					cout << "Must enter an id. Exiting" << endl;
 					exit(1);
 				}
 				conn.write(Protocol::COM_DELETE_NG);
-				char id = line.substr(space + 1, string::npos);
+
+				int id = line.substr(space + 1, string::npos);
 				conn.write(Protocol::PAR_NUM);
 				conn.write(id);
-				conn.write(Protocol::PAR_END);
+				conn.write(Protocol::COM_END);
 			}
 			if (first_word == "la") {
 				if (space == string::npos) {
@@ -82,12 +83,13 @@ int main(int argc, char* argv[]) {
 					exit(1);
 				}
 				conn.write(Protocol::COM_LIST_ART);
-				char id = line.substr(space + 1, string::npos);
+				int id = line.substr(space + 1, string::npos);
 				conn.write(Protocol::PAR_NUM);
 				conn.write(id);
-				conn.write(Protocol::PAR_END);
-			}
-				
+				conn.write(Protocol::COM_END);
+			}*/
+
+			//Read functions
 			cout << "Reply is " << conn.read() << endl;
 		} catch (ConnectionClosedException&) {
 			cout << " no reply from server. Exiting." << endl;
