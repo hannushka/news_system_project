@@ -4,7 +4,9 @@ using namespace std;
 
 void list_newsgroups(std::shared_ptr<Connection> conn) {
 	conn->write(Protocol::ANS_LIST_NG);
-	conn->write('0');
+	conn->write('1');
+	string name = "hejsan";
+	conn->write('a');
 	conn->write(Protocol::ANS_END);
 }
 
