@@ -8,3 +8,14 @@ CPP 2005 Project, Communication Classes
 - The subdirectory 'test' contains the test programs myclient and myserver,
   as defined in the project description, section 5.3.
 - 'make' makes the executables myclient and myserver.
+
+
+How to run the program:
+
+make
+cd test
+make
+In one terminal window:
+- ./news_server <port-number>
+In another terminal window:
+- ./news_client localhost <port-number>
