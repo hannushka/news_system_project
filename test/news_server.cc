@@ -1,9 +1,38 @@
-#include "controller.h"
+#include "news_server.h"
 
 using namespace std;
 
+NewsServer::NewsServer(Controller controller) : controller(controller) {
+
+}
+
+void NewsServer::run(Server& server) {
+  while (true) {
+		auto conn = server.waitForActivity();
+    controller.set_conn(conn);
+		if (conn != nullptr) {
+			try {
+				char c = conn->read();
+				switch (c) {
+					case Protocol::COM_LIST_NG: controller.list_newsgroups();
+					break;
+					default: conn->write('-');
+				}
+			} catch (ConnectionClosedException&) {
+				server.deregisterConnection(conn);
+				cout << "Client closed connection" << endl;
+			}
+		} else {
+			conn = make_shared<Connection>();
+			server.registerConnection(conn);
+			cout << "New client connects" << endl;
+		}
+	}
+}
+
 int main(int argc, char* argv[]){
   Controller controller;
+  NewsServer news_server(controller);
 	if (argc != 2) {
 		cerr << "Usage: myserver port-number" << endl;
 		exit(1);
@@ -23,24 +52,6 @@ int main(int argc, char* argv[]){
 		exit(1);
 	}
 
-	while (true) {
-		auto conn = server.waitForActivity();
-		if (conn != nullptr) {
-			try {
-				char c = conn->read();
-				switch (c) {
-					case Protocol::COM_LIST_NG: controller.list_newsgroups(conn);
-					break;
-					default: conn->write('-');
-				}
-			} catch (ConnectionClosedException&) {
-				server.deregisterConnection(conn);
-				cout << "Client closed connection" << endl;
-			}
-		} else {
-			conn = make_shared<Connection>();
-			server.registerConnection(conn);
-			cout << "New client connects" << endl;
-		}
-	}
+  news_server.run(server);
+
 }
