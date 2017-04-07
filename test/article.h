@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 
-class NewsServer {
+class Article {
 public:
 private:
   int id;
