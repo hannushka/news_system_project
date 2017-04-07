@@ -11,6 +11,7 @@
 #include <string>
 #include <stdexcept>
 #include <cstdlib>
+#include <unordered_map>
 
 class NewsServer {
 public:
@@ -18,6 +19,7 @@ public:
 		void create_newsgroups(std::shared_ptr<Connection> conn, std::string name);
 		void delete_newsgroups(std::shared_ptr<Connection> conn, int id);
 		void list_articles(std::shared_ptr<Connection> conn, int id);
+private:
 };
 
 #endif
