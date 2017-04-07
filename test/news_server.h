@@ -13,7 +13,7 @@
 #include <cstdlib>
 
 class NewsServer {
-	private:
+public:
 		void list_newsgroups(std::shared_ptr<Connection> conn);
 		void create_newsgroups(std::shared_ptr<Connection> conn, std::string name);
 		void delete_newsgroups(std::shared_ptr<Connection> conn, int id);
