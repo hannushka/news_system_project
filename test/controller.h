@@ -17,6 +17,9 @@ public:
 		void list_articles(int id);
 		void read_article(int article_id, int news_group_id);
 		void set_conn(std::shared_ptr<Connection> conn);
+
+		int read_number();
+		void write_number(int value);
 private:
 	std::unordered_map<int,NewsGroup> news_groups;
 	std::shared_ptr<Connection> conn;

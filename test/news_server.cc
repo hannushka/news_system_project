@@ -14,9 +14,21 @@ void NewsServer::run(Server& server) {
 			try {
 				char c = conn->read();
 				switch (c) {
-					case Protocol::COM_LIST_NG: controller.list_newsgroups();
+					case Protocol::COM_LIST_NG:
+          if (conn->read() == Protocol::COM_END)
+            controller.list_newsgroups();
+          break;
+          case Protocol::COM_CREATE_NG:
+          c = conn->read();
+          if (c == Protocol::PAR_STRING) { //always true?
+            int nbr_chars = controller.read_number();
+            string msg;
+            for (int i = 0; i != nbr_chars; ++i)
+              msg += conn->read();
+            if (conn->read() == Protocol::COM_END)
+              controller.create_newsgroup(msg);
+          }
 					break;
-					default: conn->write('-');
 				}
 			} catch (ConnectionClosedException&) {
 				server.deregisterConnection(conn);
