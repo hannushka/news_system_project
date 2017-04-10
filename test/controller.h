@@ -13,15 +13,15 @@ public:
 		Controller();
 		void list_newsgroups();
 		void create_newsgroup(std::string name);
-		void delete_newsgroup(int id);
-		void list_articles(int id);
-		void read_article(int article_id, int news_group_id);
+		void delete_newsgroup(unsigned int id);
+		void list_articles(unsigned int id);
+		void read_article(unsigned int article_id, unsigned int news_group_id);
 		void set_conn(std::shared_ptr<Connection> conn);
 
-		int read_number();
-		void write_number(int value);
+		unsigned read_number();
+		void write_number(unsigned value);
 private:
-	std::unordered_map<int,NewsGroup> news_groups;
+	std::unordered_map<unsigned int, NewsGroup> news_groups;
 	std::shared_ptr<Connection> conn;
 	void send_string(std::string);
 };

@@ -18,6 +18,7 @@ void NewsServer::run(Server& server) {
           if (conn->read() == Protocol::COM_END)
             controller.list_newsgroups();
           break;
+
           case Protocol::COM_CREATE_NG:
           c = conn->read();
           if (c == Protocol::PAR_STRING) { //always true?

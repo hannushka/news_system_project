@@ -35,10 +35,12 @@ void NewsClient::list_newsgroups() {
 			int nbr_ng = read_number();
 			for (int i = 0; i != nbr_ng; ++i) {
 				if (conn->read() == Protocol::PAR_NUM) {
+					unsigned int id = read_number();
 					if (conn->read() == Protocol::PAR_STRING) {
 						int str_len = read_number();
 						for (int j = 0; j != str_len; ++j)
 							msg += conn->read();
+						msg += ", id = " + to_string(id);;
 						msg += '\n';
 					}
 				}
@@ -74,11 +76,15 @@ void NewsClient::create_newsgroup(std::string name) {
 	}
 }
 
+void NewsClient::delete_newsgroup(unsigned int id) {
+
+}
+
 void NewsClient::set_conn(shared_ptr<Connection> conn) {
 	this->conn = conn;
 }
 
-int NewsClient::read_number() {
+unsigned int NewsClient::read_number() {
  	unsigned char byte1 = conn->read();
  	unsigned char byte2 = conn->read();
  	unsigned char byte3 = conn->read();
@@ -86,7 +92,7 @@ int NewsClient::read_number() {
  	return (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
 }
 
-void NewsClient::write_number(int value) {
+void NewsClient::write_number(unsigned int value) {
  	conn->write((value >> 24) & 0xFF);
  	conn->write((value >> 16) & 0xFF);
  	conn->write((value >> 8)	 & 0xFF);
