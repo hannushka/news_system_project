@@ -15,6 +15,8 @@ public:
 		void create_newsgroup(std::string name);
 		void delete_newsgroup(unsigned int id);
 		void list_articles(unsigned int id);
+		void create_article(unsigned int id, std::string title,
+			std::string author, std::string text);
 		void read_article(unsigned int article_id, unsigned int news_group_id);
 		void set_conn(std::shared_ptr<Connection> conn);
 
@@ -23,7 +25,8 @@ public:
 private:
 	std::unordered_map<unsigned int, NewsGroup> news_groups;
 	std::shared_ptr<Connection> conn;
-	void send_string(std::string);
+	void write_string(std::string);
+	int current_art_id;
 };
 
 #endif

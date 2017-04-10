@@ -8,12 +8,15 @@
 
 class NewsGroup {
 public:
-  NewsGroup(int id, std::string name);
+  NewsGroup(unsigned int id, std::string name);
   std::string get_name();
+  bool add_article(unsigned int id, Article article);
+  std::unordered_map<unsigned int, Article> get_articles();
+
 private:
-  int id;
+  unsigned int id;
   std::string name;
-  std::unordered_map<int,Article> articles;
+  std::unordered_map<unsigned int, Article> articles;
 };
 
 #endif

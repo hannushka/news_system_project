@@ -30,6 +30,53 @@ void NewsServer::run(Server& server) {
               controller.create_newsgroup(msg);
           }
 					break;
+
+          case Protocol::COM_DELETE_NG:
+          if (conn->read() == Protocol::PAR_NUM) {
+            unsigned int id = controller.read_number();
+            if (conn->read() == Protocol::COM_END)
+              controller.delete_newsgroup(id);
+          }
+          break;
+
+          case Protocol::COM_LIST_ART:
+          if (conn->read() == Protocol::PAR_NUM) {
+            unsigned int id = controller.read_number();
+            if (conn->read() == Protocol::COM_END)
+              controller.list_articles(id);
+          }
+          break;
+
+          case Protocol::COM_CREATE_ART:
+          cout << "creating article" << endl;
+          if (conn->read() == Protocol::PAR_NUM) {
+            unsigned int id = controller.read_number();
+            string title;
+            string author;
+            string text;
+            if (conn->read() == Protocol::PAR_STRING) {
+              int nbr_chars = controller.read_number();
+              for (int i = 0; i != nbr_chars; ++i)
+                title += conn->read();
+            }
+
+            if (conn->read() == Protocol::PAR_STRING) {
+              int nbr_chars = controller.read_number();
+              for (int i = 0; i != nbr_chars; ++i)
+                author += conn->read();
+            }
+
+            if (conn->read() == Protocol::PAR_STRING) {
+              int nbr_chars = controller.read_number();
+              for (int i = 0; i != nbr_chars; ++i)
+                text += conn->read();
+            }
+
+            if (conn->read() == Protocol::COM_END)
+              controller.create_article(id, title, author, text);
+          }
+          break;
+
 				}
 			} catch (ConnectionClosedException&) {
 				server.deregisterConnection(conn);
