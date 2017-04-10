@@ -13,6 +13,8 @@ void NewsServer::run(Server& server) {
 		if (conn != nullptr) {
 			try {
 				char c = conn->read();
+        int k = c;
+        cout << k << endl;
 				switch (c) {
 					case Protocol::COM_LIST_NG:
           if (conn->read() == Protocol::COM_END)
@@ -74,6 +76,20 @@ void NewsServer::run(Server& server) {
 
             if (conn->read() == Protocol::COM_END)
               controller.create_article(id, title, author, text);
+          }
+          break;
+
+          case Protocol::COM_DELETE_ART:
+          unsigned int ng_id;
+          unsigned int art_id;
+          if (conn->read() == Protocol::PAR_NUM) {
+            ng_id = controller.read_number();
+            if (conn->read() == Protocol::PAR_NUM) {
+              art_id = controller.read_number();
+              if (conn->read() == Protocol::COM_END) {
+                controller.delete_article(ng_id, art_id);
+              }
+            }
           }
           break;
 

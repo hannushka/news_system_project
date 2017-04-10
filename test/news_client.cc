@@ -179,6 +179,40 @@ void NewsClient::create_article(unsigned int id, string title,
 	}
 }
 
+void NewsClient::delete_article(unsigned int news_group_id,
+	unsigned int article_id) {
+	conn->write(Protocol::COM_DELETE_ART);
+
+	conn->write(Protocol::PAR_NUM);
+	write_number(news_group_id);
+	conn->write(Protocol::PAR_NUM);
+	write_number(article_id);
+
+	conn->write(Protocol::COM_END);
+
+	//Read
+	char c = conn->read();
+	if (c == Protocol::ANS_DELETE_ART) {
+		c = conn->read();
+		if (c == Protocol::ANS_ACK) {
+			cout << "article with id " << article_id <<
+			" was successfully deleted from newsgroup with id "
+			<< news_group_id << endl;
+		 } else if (c == Protocol::ANS_NAK) {
+			 c = conn->read();
+			 if (c == Protocol::ERR_NG_DOES_NOT_EXIST) {
+				 cout << "newsgroup with id " << news_group_id <<
+				 " does not exist" << endl;
+			 } else if (c == Protocol::ERR_ART_DOES_NOT_EXIST) {
+				 cout << "article with id " << article_id <<
+				 " does not exist" << endl;
+			 }
+		 }
+	 }
+	 if (conn->read() != Protocol::ANS_END)
+		 cerr << "did not reach end" << endl;
+}
+
 void NewsClient::set_conn(shared_ptr<Connection> conn) {
 	this->conn = conn;
 }
@@ -235,8 +269,9 @@ int main(int argc, char* argv[]) {
 			getline(cin, line);
 
 			auto space = line.find(' ');
-			string first_w	/*cout << "created article with id: " << id<<", title: " << title
-	<<", author: " << author << " and text: " << text <<endl;*/list_newsgroups();
+			string first_word = line.substr(0, space);
+			if (first_word == "ls") {
+				news_client.list_newsgroups();
 			} else if (first_word == "cn") {
 				if (space == string::npos) {
 					cout << "Must enter a name. Exiting..." << endl;
@@ -295,6 +330,35 @@ int main(int argc, char* argv[]) {
 				}
 
 				news_client.create_article(id, title, author, text);
+			} else if (first_word == "da") {
+				if (space == string::npos) {
+					cout << "Must enter more than da. Exiting..." << endl;
+					exit(1);
+				}
+
+				string input = line.substr(space + 1, string::npos);
+				istringstream iss;
+				iss.str(input);
+
+				string ng_id_str;
+				iss >> ng_id_str;
+				if (ng_id_str == "") {
+					cout << "Must input newsgroup ID. Exiting..." << endl;
+					exit(1);
+				}
+				unsigned int ng_id = stoul(ng_id_str);
+
+
+				string art_id_str;
+				iss >> art_id_str;
+				if (art_id_str == "") {
+					cout << "Must input article ID. Exiting..." << endl;
+					exit(1);
+				}
+				unsigned int art_id = stoul(art_id_str);
+
+				news_client.delete_article(ng_id, art_id);
+
 			} else {
 				cout << "Wrong response" << endl;
 			}

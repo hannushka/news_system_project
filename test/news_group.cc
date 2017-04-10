@@ -16,7 +16,18 @@ bool NewsGroup::add_article(unsigned int id, Article article) {
     return true;
   else
     return false;*/
+    //it will always be possible to add articles, so these commented stuff
+    //is unnecessary I guess
     return true;
+}
+
+bool NewsGroup::remove_article(unsigned int id) {
+  auto it = articles.find(id);
+  if (it != articles.end()) {
+    articles.erase(it);
+    return true;
+  }
+  return false;
 }
 
 std::unordered_map<unsigned int, Article> NewsGroup::get_articles() {

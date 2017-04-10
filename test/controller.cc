@@ -95,6 +95,25 @@ void Controller::create_article(unsigned int id, string title,
 	conn->write(Protocol::ANS_END);
 }
 
+void Controller::delete_article(unsigned int news_group_id,
+	unsigned int article_id) {
+	conn->write(Protocol::ANS_DELETE_ART);
+	auto it_ng = news_groups.find(news_group_id);
+	if (it_ng != news_groups.end()) {
+		bool succ = it_ng->second.remove_article(article_id);
+		if (succ) {
+			conn->write(Protocol::ANS_ACK);
+		} else {
+			conn->write(Protocol::ANS_NAK);
+			conn->write(Protocol::ERR_ART_DOES_NOT_EXIST);
+		}
+	} else {
+		conn->write(Protocol::ANS_NAK);
+		conn->write(Protocol::ERR_NG_DOES_NOT_EXIST);
+	}
+	conn->write(Protocol::ANS_END);
+}
+
 void Controller::write_string(string msg) {
 	for (char c : msg)
 	{

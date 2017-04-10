@@ -14,7 +14,8 @@ public:
   void list_articles(unsigned int id);
   void create_article(unsigned int id, std::string title,
     std::string author, std::string text);
-  void read_article(unsigned int article_id, unsigned int news_group_id);
+  void delete_article(unsigned int news_group_id, unsigned int article_id);
+  void read_article(unsigned int news_group_id, unsigned int article_id);
   void set_conn(std::shared_ptr<Connection> conn);
 
   //Should these be private or public?

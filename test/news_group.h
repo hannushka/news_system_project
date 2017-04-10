@@ -11,6 +11,7 @@ public:
   NewsGroup(unsigned int id, std::string name);
   std::string get_name();
   bool add_article(unsigned int id, Article article);
+  bool remove_article(unsigned int id);
   std::unordered_map<unsigned int, Article> get_articles();
 
 private:
