@@ -5,7 +5,7 @@
 #include "connection.h"
 #include "connectionclosedexception.h"
 #include "protocol.h"
-#include "controller.h"
+#include "server_controller.h"
 
 #include <memory>
 #include <iostream>
@@ -15,10 +15,10 @@
 
 class NewsServer {
 public:
-  NewsServer(Controller controller);
+  NewsServer(ServerController controller);
   void run(Server& server);
 private:
-  Controller controller;
+  ServerController controller;
 };
 
 #endif

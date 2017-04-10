@@ -2,7 +2,8 @@
 
 using namespace std;
 
-NewsServer::NewsServer(Controller controller) : controller(controller) {
+NewsServer::NewsServer(ServerController controller) :
+  controller(controller) {
 
 }
 
@@ -13,8 +14,6 @@ void NewsServer::run(Server& server) {
 		if (conn != nullptr) {
 			try {
 				char c = conn->read();
-        int k = c;
-        cout << k << endl;
 				switch (c) {
 					case Protocol::COM_LIST_NG:
           if (conn->read() == Protocol::COM_END)
@@ -121,8 +120,6 @@ void NewsServer::run(Server& server) {
 }
 
 int main(int argc, char* argv[]){
-  Controller controller;
-  NewsServer news_server(controller);
 	if (argc != 2) {
 		cerr << "Usage: myserver port-number" << endl;
 		exit(1);
@@ -142,6 +139,8 @@ int main(int argc, char* argv[]){
 		exit(1);
 	}
 
+  ServerController controller;
+  NewsServer news_server(controller);
   news_server.run(server);
 
 }

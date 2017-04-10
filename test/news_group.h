@@ -4,7 +4,7 @@
 #include "article.h"
 
 #include <string>
-#include <unordered_map>
+#include <map>
 
 class NewsGroup {
 public:
@@ -12,12 +12,12 @@ public:
   std::string get_name();
   bool add_article(unsigned int id, Article article);
   bool remove_article(unsigned int id);
-  std::unordered_map<unsigned int, Article> get_articles();
+  std::map<unsigned int, Article> get_articles();
 
 private:
   unsigned int id;
   std::string name;
-  std::unordered_map<unsigned int, Article> articles;
+  std::map<unsigned int, Article> articles;
 };
 
 #endif

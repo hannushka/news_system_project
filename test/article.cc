@@ -2,8 +2,8 @@
 
 using namespace std;
 
-Article::Article(unsigned int id, std::string title, std::string author, std::string text) :
-  id(id), title(title), author(author), text(text) {
+Article::Article(unsigned int id, std::string title, std::string author,
+  std::string text) : id(id), title(title), author(author), text(text) {
 
 }
 

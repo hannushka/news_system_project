@@ -4,27 +4,16 @@
 #include <memory>
 #include <string>
 #include "connection.h"
+#include "client_controller.h"
 
 class NewsClient {
 public:
-  NewsClient();
-  void list_newsgroups();
-  void create_newsgroup(std::string name);
-  void delete_newsgroup(unsigned int id);
-  void list_articles(unsigned int id);
-  void create_article(unsigned int id, std::string title,
-    std::string author, std::string text);
-  void delete_article(unsigned int news_group_id, unsigned int article_id);
-  void read_article(unsigned int news_group_id, unsigned int article_id);
-  void set_conn(std::shared_ptr<Connection> conn);
+  NewsClient(ClientController controller);
 
-  //Should these be private or public?
-  unsigned int read_number();
-  void write_number(unsigned int value);
-  void write_string(std::string);
+  void run();
 
 private:
-  std::shared_ptr<Connection> conn;
+  ClientController controller;
 };
 
 #endif

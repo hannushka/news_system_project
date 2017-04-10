@@ -30,6 +30,6 @@ bool NewsGroup::remove_article(unsigned int id) {
   return false;
 }
 
-std::unordered_map<unsigned int, Article> NewsGroup::get_articles() {
+std::map<unsigned int, Article> NewsGroup::get_articles() {
   return articles;
 }
