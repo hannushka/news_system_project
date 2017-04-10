@@ -114,6 +114,42 @@ void Controller::delete_article(unsigned int news_group_id,
 	conn->write(Protocol::ANS_END);
 }
 
+void Controller::read_article(unsigned int news_group_id,
+	unsigned int article_id) {
+	conn->write(Protocol::ANS_GET_ART);
+	auto it_ng = news_groups.find(news_group_id);
+	if (it_ng != news_groups.end()) {
+		auto articles = it_ng->second.get_articles();
+		auto it_art = articles.find(article_id);
+		if (it_art != articles.end()) {
+			conn->write(Protocol::ANS_ACK);
+			string title = it_art->second.get_title();
+			string author = it_art->second.get_author();
+			string text = it_art->second.get_text();
+
+			conn->write(Protocol::PAR_STRING);
+			write_number(title.size());
+			write_string(title);
+
+			conn->write(Protocol::PAR_STRING);
+			write_number(author.size());
+			write_string(author);
+
+			conn->write(Protocol::PAR_STRING);
+			write_number(text.size());
+			write_string(text);
+
+		} else {
+			conn->write(Protocol::ANS_NAK);
+			conn->write(Protocol::ERR_ART_DOES_NOT_EXIST);
+		}
+	} else {
+		conn->write(Protocol::ANS_NAK);
+		conn->write(Protocol::ERR_NG_DOES_NOT_EXIST);
+	}
+	conn->write(Protocol::ANS_END);
+}
+
 void Controller::write_string(string msg) {
 	for (char c : msg)
 	{

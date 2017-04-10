@@ -93,6 +93,20 @@ void NewsServer::run(Server& server) {
           }
           break;
 
+          case Protocol::COM_GET_ART:
+          unsigned int news_group_id; //redefinition if ng_id? wtf
+          unsigned int article_id;
+          if (conn->read() == Protocol::PAR_NUM) {
+            news_group_id = controller.read_number();
+            if (conn->read() == Protocol::PAR_NUM) {
+              article_id = controller.read_number();
+              if (conn->read() == Protocol::COM_END) {
+                controller.read_article(news_group_id, article_id);
+              }
+            }
+          }
+          break;
+
 				}
 			} catch (ConnectionClosedException&) {
 				server.deregisterConnection(conn);

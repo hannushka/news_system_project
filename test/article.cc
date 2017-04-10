@@ -10,3 +10,11 @@ Article::Article(unsigned int id, std::string title, std::string author, std::st
 string Article::get_title() {
   return title;
 }
+
+string Article::get_author() {
+  return author;
+}
+
+string Article::get_text() {
+  return text;
+}

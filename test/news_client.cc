@@ -213,6 +213,63 @@ void NewsClient::delete_article(unsigned int news_group_id,
 		 cerr << "did not reach end" << endl;
 }
 
+void NewsClient::read_article(unsigned int news_group_id,
+	unsigned int article_id) {
+	conn->write(Protocol::COM_GET_ART);
+
+	conn->write(Protocol::PAR_NUM);
+	write_number(news_group_id);
+	conn->write(Protocol::PAR_NUM);
+	write_number(article_id);
+
+	conn->write(Protocol::COM_END);
+
+	//Read
+	char c = conn->read();
+	if (c == Protocol::ANS_GET_ART) {
+		c = conn->read();
+		if (c == Protocol::ANS_ACK) {
+			if (conn->read() == Protocol::PAR_STRING) {
+				int str_len = read_number();
+				string title;
+				for (int i = 0; i != str_len; ++i) {
+					title += conn->read();
+				}
+				cout << "Article: " << title << endl;
+			}
+
+			if (conn->read() == Protocol::PAR_STRING) {
+				int str_len = read_number();
+				string author;
+				for (int i = 0; i != str_len; ++i) {
+					author += conn->read();
+				}
+				cout << "Author: " << author << endl;
+			}
+
+			if (conn->read() == Protocol::PAR_STRING) {
+				int str_len = read_number();
+				string text;
+				for (int i = 0; i != str_len; ++i) {
+					text += conn->read();
+				}
+				cout << "Text: " << endl << text << endl;
+			}
+		 } else if (c == Protocol::ANS_NAK) {
+			 c = conn->read();
+			 if (c == Protocol::ERR_NG_DOES_NOT_EXIST) {
+				 cout << "newsgroup with id " << news_group_id <<
+				 " does not exist" << endl;
+			 } else if (c == Protocol::ERR_ART_DOES_NOT_EXIST) {
+				 cout << "article with id " << article_id <<
+				 " does not exist" << endl;
+			 }
+		 }
+	 }
+	 if (conn->read() != Protocol::ANS_END)
+		 cerr << "did not reach end" << endl;
+}
+
 void NewsClient::set_conn(shared_ptr<Connection> conn) {
 	this->conn = conn;
 }
@@ -330,7 +387,7 @@ int main(int argc, char* argv[]) {
 				}
 
 				news_client.create_article(id, title, author, text);
-			} else if (first_word == "da") {
+			} else if (first_word == "da" || first_word == "ra") {
 				if (space == string::npos) {
 					cout << "Must enter more than da. Exiting..." << endl;
 					exit(1);
@@ -357,8 +414,10 @@ int main(int argc, char* argv[]) {
 				}
 				unsigned int art_id = stoul(art_id_str);
 
-				news_client.delete_article(ng_id, art_id);
-
+				if (first_word == "da")
+					news_client.delete_article(ng_id, art_id);
+				if (first_word == "ra")
+					news_client.read_article(ng_id, art_id);
 			} else {
 				cout << "Wrong response" << endl;
 			}
