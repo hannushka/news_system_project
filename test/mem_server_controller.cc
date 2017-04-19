@@ -1,13 +1,13 @@
-#include "server_controller.h"
+#include "mem_server_controller.h"
 #include <iostream>
 
 using namespace std;
 
-ServerController::ServerController() : Controller(),
+MemServerController::MemServerController() : Controller(),
 	current_ng_id(0), current_art_id(0) {
 }
 
-void ServerController::list_newsgroups() {
+void MemServerController::list_newsgroups() {
 	conn->write(Protocol::ANS_LIST_NG);
 	conn->write(Protocol::PAR_NUM);
 	write_number(news_groups.size());
@@ -22,7 +22,7 @@ void ServerController::list_newsgroups() {
 	conn->write(Protocol::ANS_END);
 }
 
-void ServerController::create_newsgroup(std::string name) {
+void MemServerController::create_newsgroup(std::string name) {
 	conn->write(Protocol::ANS_CREATE_NG);
 	NewsGroup n(current_ng_id, name);
 	bool success = false;
@@ -44,7 +44,7 @@ void ServerController::create_newsgroup(std::string name) {
 	conn->write(Protocol::ANS_END);
 }
 
-void ServerController::delete_newsgroup(unsigned int id) {
+void MemServerController::delete_newsgroup(unsigned int id) {
 	conn->write(Protocol::ANS_DELETE_NG);
 	auto it = news_groups.find(id);
 	if (it != news_groups.end()) {
@@ -57,7 +57,7 @@ void ServerController::delete_newsgroup(unsigned int id) {
 	conn->write(Protocol::ANS_END);
 }
 
-void ServerController::list_articles(unsigned int id) {
+void MemServerController::list_articles(unsigned int id) {
 	conn->write(Protocol::ANS_LIST_ART);
 	auto it_ng = news_groups.find(id);
 	if (it_ng != news_groups.end()) {
@@ -80,7 +80,7 @@ void ServerController::list_articles(unsigned int id) {
 	conn->write(Protocol::ANS_END);
 }
 
-void ServerController::create_article(unsigned int id, string title,
+void MemServerController::create_article(unsigned int id, string title,
 	string author, string text) {
 	conn->write(Protocol::ANS_CREATE_ART);
 	auto it_ng = news_groups.find(id);
@@ -96,7 +96,7 @@ void ServerController::create_article(unsigned int id, string title,
 	conn->write(Protocol::ANS_END);
 }
 
-void ServerController::delete_article(unsigned int news_group_id,
+void MemServerController::delete_article(unsigned int news_group_id,
 	unsigned int article_id) {
 	conn->write(Protocol::ANS_DELETE_ART);
 	auto it_ng = news_groups.find(news_group_id);
@@ -115,7 +115,7 @@ void ServerController::delete_article(unsigned int news_group_id,
 	conn->write(Protocol::ANS_END);
 }
 
-void ServerController::read_article(unsigned int news_group_id,
+void MemServerController::read_article(unsigned int news_group_id,
 	unsigned int article_id) {
 	conn->write(Protocol::ANS_GET_ART);
 	auto it_ng = news_groups.find(news_group_id);

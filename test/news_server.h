@@ -5,7 +5,8 @@
 #include "connection.h"
 #include "connectionclosedexception.h"
 #include "protocol.h"
-#include "server_controller.h"
+#include "mem_server_controller.h"
+#include "disk_server_controller.h"
 
 #include <memory>
 #include <iostream>
@@ -15,10 +16,10 @@
 
 class NewsServer {
 public:
-  NewsServer(ServerController controller);
+  NewsServer(bool b);
   void run(Server& server);
 private:
-  ServerController controller;
+  std::unique_ptr<Controller> controller;
 };
 
 #endif

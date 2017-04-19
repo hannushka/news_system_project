@@ -8,7 +8,7 @@ CC  = g++
 # if you use clang++ and wish to use libc++ instead of libstd++.
 CPPFLAGS  = -std=c++11 -I..
 CXXFLAGS  = -g -O2 -Wall -W -pedantic-errors
-CXXFLAGS += -Wmissing-braces -Wparentheses -Wold-style-cast
+CXXFLAGS += -Wmissing-braces -Wparentheses -Wold-style-cast 
 CXXFLAGS += -std=c++11
 LDFLAGS   = -g -L..
 #CPPFLAGS += -stdlib=libc++
@@ -27,7 +27,7 @@ all: $(PROGS)
 # The dependency on libclientserver.a is not defined.
 myserver: myserver.o
 myclient: myclient.o
-news_server: news_server.o article.o news_group.o server_controller.o controller.o
+news_server: news_server.o article.o news_group.o disk_server_controller.o mem_server_controller.o controller.o
 news_client: news_client.o client_controller.o controller.o
 
 # Phony targets

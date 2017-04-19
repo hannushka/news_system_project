@@ -1,13 +1,13 @@
-#ifndef SERVER_CONTROLLER_H
-#define SERVER_CONTROLLER_H
+#ifndef MEM_SERVER_CONTROLLER_H
+#define MEM_SERVER_CONTROLLER_H
 
 #include "news_group.h"
 #include "controller.h"
 #include <set>
 
-class ServerController : public Controller {
+class MemServerController : public Controller {
 public:
-	ServerController();
+	MemServerController();
 	void list_newsgroups() override;
 	void create_newsgroup(std::string name) override;
 	void delete_newsgroup(unsigned int id) override;
