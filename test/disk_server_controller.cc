@@ -41,10 +41,16 @@ void DiskServerController::list_newsgroups() {
 void DiskServerController::create_newsgroup(string name) {
 	conn->write(Protocol::ANS_CREATE_NG);
 
-	string path = "newsgroups/" + name;
-	DIR* dir = opendir(path.c_str());
+	ifstream has_newsgroups("newsgroups");
+	if (!has_newsgroups) {
+		mkdir("newsgroups", 0700);
+	}
 
-	if (dir == nullptr) {
+	string path = "newsgroups/" + name;
+	ifstream has_newsgroup(path);
+	//DIR* dir = opendir(path.c_str());
+
+	if (!has_newsgroup) {
 		mkdir(path.c_str(), 0700);
 
 		ifstream in_file("newsgroups/info");
