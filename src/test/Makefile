@@ -36,7 +36,7 @@ clean:
 	rm -f *.o $(PROGS)
 
 install: 
-	cp $(PROGS) $(cd ../../bin)
+	cp $(PROGS) ../../bin/
 
 # Generate dependencies in *.d files
 %.d: %.cc

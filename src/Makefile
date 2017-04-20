@@ -33,7 +33,7 @@ libclientserver.a: connection.o server.o
 test_install:
 	cd test && make install
 
-install: 	test_install
+install: test_install
 
 # Standard clean
 clean:

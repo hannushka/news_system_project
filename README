@@ -12,9 +12,11 @@ CPP 2005 Project, Communication Classes
 
 How to run the program:
 
-make
-cd test
-make
+cd src
+make all
+make install
+cd ../bin
+
 In one terminal window:
 - ./news_server <port-number>
 In another terminal window:
@@ -26,15 +28,15 @@ cn name 				//creates newsgroup with the name "name"
 ls					//lists all newsgroups
 
 ca 1 Hej Einar Hej, jag heter Einar 	//creates an article in newsgroup with 
-					//id: 0, title: "Hej", author: "Einar"
+					//id: 1, title: "Hej", author: "Einar"
 					//and text: "Hej, jag heter Einar"
 
-da 1 1					//deletes article with id: 0 from newsgroup
-					//with id: 0
+da 1 2					//deletes article with id: 2 
+					//from newsgroup with id: 1
 
-dn 1					//deletes newsgroup with id: 0
+dn 1					//deletes newsgroup with id: 1
 
-la 1					//lists all articles in newsgroup with id: 0
+la 1					//lists all articles in newsgroup with id: 1
 
-ra 1 1					//reads the title, author and text from
-					//article with id: 0 and newsgroup with id: 0 
+ra 1 2					//reads the title, author and text from
+					//article with id: 2 and newsgroup with id: 1
