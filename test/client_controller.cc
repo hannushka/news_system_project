@@ -72,7 +72,7 @@ void ClientController::delete_newsgroup(unsigned int id) {
 			<< " was deleted successfully" << endl;
 		} else if (c == Protocol::ANS_NAK) {
 			c = conn->read();
-			if (c == Protocol::ERR_NG_ALREADY_EXISTS) {
+			if (c == Protocol::ERR_NG_DOES_NOT_EXIST) {
 				cout << "newsgroup with id = " << id
 				<< " does not exist" << endl;
 			}

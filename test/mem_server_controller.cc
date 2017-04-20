@@ -52,7 +52,7 @@ void MemServerController::delete_newsgroup(unsigned int id) {
 		conn->write(Protocol::ANS_ACK);
 	} else {
 		conn->write(Protocol::ANS_NAK);
-		conn->write(Protocol::ERR_NG_ALREADY_EXISTS);
+		conn->write(Protocol::ERR_NG_DOES_NOT_EXIST);
 	}
 	conn->write(Protocol::ANS_END);
 }

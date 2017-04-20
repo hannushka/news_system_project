@@ -19,8 +19,6 @@ public:
     unsigned int article_id) override;
 
 private:
-	unsigned int current_ng_id;
-	unsigned int current_art_id;
 };
 
 #endif

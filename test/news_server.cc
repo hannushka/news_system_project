@@ -3,6 +3,7 @@
 using namespace std;
 
 NewsServer::NewsServer(bool b) {
+	//controller = unique_ptr<MemServerController>(new MemServerController());
 	controller = unique_ptr<DiskServerController>(new DiskServerController());
 }
 
