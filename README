@@ -25,16 +25,16 @@ cn name 				//creates newsgroup with the name "name"
 
 ls					//lists all newsgroups
 
-ca 0 Hej Einar Hej, jag heter Einar 	//creates an article in newsgroup with 
+ca 1 Hej Einar Hej, jag heter Einar 	//creates an article in newsgroup with 
 					//id: 0, title: "Hej", author: "Einar"
 					//and text: "Hej, jag heter Einar"
 
-da 0 0					//deletes article with id: 0 from newsgroup
+da 1 1					//deletes article with id: 0 from newsgroup
 					//with id: 0
 
-dn 0					//deletes newsgroup with id: 0
+dn 1					//deletes newsgroup with id: 0
 
-la 0					//lists all articles in newsgroup with id: 0
+la 1					//lists all articles in newsgroup with id: 0
 
-ra 0 0					//reads the title, author and text from
+ra 1 1					//reads the title, author and text from
 					//article with id: 0 and newsgroup with id: 0 

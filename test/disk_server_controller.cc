@@ -5,7 +5,6 @@
 #include <sstream>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <dirent.h>
 
 using namespace std;
 
@@ -48,7 +47,6 @@ void DiskServerController::create_newsgroup(string name) {
 
 	string path = "newsgroups/" + name;
 	ifstream has_newsgroup(path);
-	//DIR* dir = opendir(path.c_str());
 
 	if (!has_newsgroup) {
 		mkdir(path.c_str(), 0700);
@@ -114,7 +112,6 @@ void DiskServerController::delete_newsgroup(unsigned int id) {
 				--nbr_of_folders;
 				name = "\"" + name + "\""; //system does not allow spaces...
 				string path = "rm -r newsgroups/" + name;
-				cout << path << endl;
 				int error = system(path.c_str());
 				if (error) {
 					cerr << "could not delete folder " + name << endl;
@@ -274,9 +271,17 @@ void DiskServerController::delete_article(unsigned int news_group_id,
 							if (current_art_id != article_id) {
 								oss << temp_title << endl << current_art_id << endl;
 							} else {
+								art_found = true;
 								conn->write(Protocol::ANS_ACK);
 								--nbr_of_articles;
-								art_found = true;
+
+								string path = "newsgroups/" + name + "/" +
+									temp_title + "_" + to_string(current_art_id);
+								int error = remove(path.c_str());
+								if (error) {
+									cerr << "could not delete article " + temp_title << endl;
+									exit(1);
+								}
 							}
 						}
 						ofstream out_file("newsgroups/" + name + "/info");

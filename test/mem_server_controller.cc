@@ -4,7 +4,7 @@
 using namespace std;
 
 MemServerController::MemServerController() : Controller(),
-	current_ng_id(0), current_art_id(0) {
+	current_ng_id(1), current_art_id(1) {
 }
 
 void MemServerController::list_newsgroups() {
