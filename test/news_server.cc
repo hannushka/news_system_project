@@ -3,11 +3,14 @@
 using namespace std;
 
 NewsServer::NewsServer(bool b) {
-	//controller = unique_ptr<MemServerController>(new MemServerController());
-	controller = unique_ptr<DiskServerController>(new DiskServerController());
+	if (b)
+		controller = unique_ptr<MemServerController>(new MemServerController());
+	else
+		controller = unique_ptr<DiskServerController>(new DiskServerController());
 }
 
 void NewsServer::run(Server& server) {
+	cout << "server is running" << endl;
   while (true) {
 		auto conn = server.waitForActivity();
     controller->set_conn(conn);
@@ -139,7 +142,17 @@ int main(int argc, char* argv[]){
 		exit(1);
 	}
 
-  NewsServer news_server(true);
-  news_server.run(server);
+	cout << "press 1 for in memory version, 2 for disk version" << endl;
+	string answer;
+	cin >> answer;
+	int result = stoi(answer);
+
+	if (result == 1) {
+		NewsServer news_server(true);
+		news_server.run(server);
+	} else if (result == 2) {
+		NewsServer news_server(false);
+		news_server.run(server);
+	}
 
 }
