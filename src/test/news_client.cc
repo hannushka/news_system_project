@@ -18,109 +18,148 @@ NewsClient::NewsClient(ClientController controller) :
 }
 
 void NewsClient::run() {
+  cout << "Client is running. Type help for all commands." << endl << endl;
 	while (true) {
 		try {
 			cout << "Type a command: ";
 			string line;
 			getline(cin, line);
+      istringstream iss(line);
 
-			auto space = line.find(' ');
-			string first_word = line.substr(0, space);
-			if (first_word == "ls") {
-				controller.list_newsgroups();
-			} else if (first_word == "cn") {
-				if (space == string::npos) {
-					cout << "Must enter a name. Exiting..." << endl;
-					exit(1);
-				}
-				string name = line.substr(space + 1, string::npos);
-				controller.create_newsgroup(name);
-			} else if (first_word == "dn") {
-				if (space == string::npos) {
-					cout << "Must enter an id. Exiting..." << endl;
-					exit(1);
-				}
-				string id_str = line.substr(space + 1, string::npos);
-				unsigned int id = stoul(id_str);
-				controller.delete_newsgroup(id);
-			}	else if (first_word == "la") {
-				if (space == string::npos) {
-					cout << "Must enter an id. Exiting..." << endl;
-					exit(1);
-				}
-				string id_str = line.substr(space + 1, string::npos);
-				unsigned int id = stoul(id_str);
-				controller.list_articles(id);
-			} else if (first_word == "ca") {
-				if (space == string::npos) {
-					cout << "Must enter more than ca. Exiting..." << endl;
-					exit(1);
-				}
+      string command;
+      iss >> command;
+			if (command == "ls") {
+        if (iss >> command) {
+          cout << command + " takes no arguments" << endl;
+        } else {
+	         controller.list_newsgroups();
+        }
+			} else if (command == "cn") {
+        string name;
+        iss >> name;
+        if (iss >> name) {
+          cout << command + " takes only one argument" << endl;
+        } else {
+          controller.create_newsgroup(name);
+        }
+			} else if (command == "dn") {
+        string id_str;
+        if (iss >> id_str) {
+          try {
+            if (iss >> id_str) {
+              cout << command + " takes only one argument" << endl;
+            } else {
+              unsigned int id = stoul(id_str);
+              controller.delete_newsgroup(id);
+            }
+          } catch (std::invalid_argument) {
+              cout << "id must be an integer" << endl;
+          }
+        } else {
+          cout << command + " needs at least one argument" <<endl;
+        }
 
-				string input = line.substr(space + 1, string::npos);
-				istringstream iss;
-				iss.str(input);
+			}	else if (command == "la") {
+        string id_str;
+        if (iss >> id_str) {
+          try {
+            if (iss >> id_str) {
+              cout << command + " takes only one argument" << endl;
+            } else {
+              unsigned int id = stoul(id_str);
+              controller.list_articles(id);
+            }
+          } catch (std::invalid_argument) {
+              cout << "id must be an integer" << endl;
+          }
+        } else {
+            cout << command + " needs at least one argument" <<endl;
+        }
 
+			} else if (command == "ca") {
 				string id_str;
-				iss >> id_str;
-				unsigned int id = stoul(id_str);
+				if (iss >> id_str) {
+          try {
+            unsigned int id = stoul(id_str);
+            string title;
+            iss >> title;
+            if (title == "") {
+              cout << "must input title" << endl;
+            } else {
+              string author;
+              iss >> author;
+              if (author == "") {
+                cout << "must input author" << endl;
+              } else {
+                  string word;
+                  string text;
+                  while (iss >> word) {
+                    text += word + " ";
+                  }
+                  controller.create_article(id, title, author, text);
+              }
+            }
+          } catch (std::invalid_argument) {
+              cout << "id must be an integer" << endl;
+          }
+        } else {
+          cout << command + " needs four arguments" << endl;
+        }
 
-				string title;
-				iss >> title;
-				if (title == "") {
-					cout << "Must input title. Exiting..." << endl;
-					exit(1);
-				}
-
-				string author;
-				iss >> author;
-				if (author == "") {
-					cout << "Must input author. Exiting..." << endl;
-					exit(1);
-				}
-
-				string word;
-				string text;
-				while (iss >> word) {
-					text += word +" ";
-				}
-
-				controller.create_article(id, title, author, text);
-			} else if (first_word == "da" || first_word == "ra") {
-				if (space == string::npos) {
-					cout << "Must enter more than da. Exiting..." << endl;
-					exit(1);
-				}
-
-				string input = line.substr(space + 1, string::npos);
-				istringstream iss;
-				iss.str(input);
-
+			} else if (command == "da" || command == "ra") {
 				string ng_id_str;
-				iss >> ng_id_str;
-				if (ng_id_str == "") {
-					cout << "Must input newsgroup ID. Exiting..." << endl;
-					exit(1);
-				}
-				unsigned int ng_id = stoul(ng_id_str);
-
-				string art_id_str;
-				iss >> art_id_str;
-				if (art_id_str == "") {
-					cout << "Must input article ID. Exiting..." << endl;
-					exit(1);
-				}
-				unsigned int art_id = stoul(art_id_str);
-
-				if (first_word == "da")
-					controller.delete_article(ng_id, art_id);
-				if (first_word == "ra")
-					controller.read_article(ng_id, art_id);
-			} else {
-				cout << "Wrong response" << endl;
+        string art_id_str;
+				if (iss >> ng_id_str) {
+          try {
+  				  unsigned int ng_id = stoul(ng_id_str);
+            if (iss >> art_id_str) {
+              try {
+      				  unsigned int art_id = stoul(art_id_str);
+                if (command == "da")
+                  controller.delete_article(ng_id, art_id);
+                if (command == "ra")
+                  controller.read_article(ng_id, art_id);
+              } catch (std::invalid_argument) {
+                  cout << "article id must be an integer" << endl;
+              }
+            } else {
+                cout << command + " needs two arguments" << endl;
+            }
+          } catch (std::invalid_argument) {
+              cout << "newsgroup id must be an integer" << endl;
+          }
+        } else {
+            cout << command + " needs two arguments" << endl;
+        }
+			} else if (command == "help") {
+        string dummy;
+        if (iss >> dummy) {
+          cout << command + " takes no arguments" << endl;
+        } else {
+          cout << endl;
+          cout << "cn <name>\t\t\t\tcreates a newsgroup with the typed " <<
+            "name" << endl << endl;
+          cout << "ls\t\t\t\t\tlists all newsgroups" << endl << endl;
+          cout << "ca <ng_id> <title> <author> <text>\t" <<
+            "creates an article in newsgroup with" << endl <<
+            "\t\t\t\t\tid: ng_id, title, author and text" << endl << endl;
+          cout << "da <ng_id> <art_id>\t\t\tdeletes article with " <<
+            "id: art_id" << endl << "\t\t\t\t\tfrom newsgroup with " <<
+            "id: ng_id" << endl << endl;
+          cout << "dn <ng_id>\t\t\t\tdeletes newsgroup with id: " <<
+            "ng_id" << endl << endl;
+          cout << "la <ng_id>\t\t\t\tlists all articles in newsgroup with" <<
+            endl << "\t\t\t\t\tid: ng_id" << endl << endl;
+          cout << "ra <ng_id> <art_id>\t\t\treads the title, author " <<
+            "and text from" << endl << "\t\t\t\t\tarticle with id: art_id "<<
+            "and from" << endl << "\t\t\t\t\tnewsgroup with id: ng_id" <<
+            endl << endl;
+        }
+      } else {
+				cout << "command does not exist, type help for all commands" << endl;
 			}
 		} catch (ConnectionClosedException&) {
-			cout << " no reply from server. Exiting..." << endl;
+			cout << "no reply from server. Exiting..." << endl;
 			exit(1);
 		}
 	}

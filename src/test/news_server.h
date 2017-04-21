@@ -16,7 +16,7 @@
 
 class NewsServer {
 public:
-  NewsServer(bool b);
+  NewsServer(bool in_memory);
   void run(Server& server);
 private:
   std::unique_ptr<Controller> controller;

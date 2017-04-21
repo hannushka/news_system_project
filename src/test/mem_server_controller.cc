@@ -46,9 +46,12 @@ void MemServerController::create_newsgroup(std::string name) {
 
 void MemServerController::delete_newsgroup(unsigned int id) {
 	conn->write(Protocol::ANS_DELETE_NG);
-	auto it = news_groups.find(id);
-	if (it != news_groups.end()) {
-		news_groups.erase(it);
+	auto it_ng = news_groups.find(id);
+	if (it_ng != news_groups.end()) {
+		news_groups.erase(it_ng);
+		string name = it_ng->second.get_name();
+		auto it_names = ng_names.find(name);
+		ng_names.erase(it_names);
 		conn->write(Protocol::ANS_ACK);
 	} else {
 		conn->write(Protocol::ANS_NAK);

@@ -11,13 +11,8 @@ string NewsGroup::get_name() {
 }
 
 bool NewsGroup::add_article(unsigned int id, Article article) {
-/*  auto succ = */articles.emplace(id, article);
-/*  if (succ.second)
-    return true;
-  else
-    return false;*/
-    //it will always be possible to add articles, so these commented stuff
-    //is unnecessary I guess
+    //it will always be possible to add a new article
+    articles.emplace(id, article);
     return true;
 }
 

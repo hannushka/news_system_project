@@ -40,3 +40,5 @@ la 1					//lists all articles in newsgroup with id: 1
 
 ra 1 2					//reads the title, author and text from
 					//article with id: 2 and newsgroup with id: 1
+
+help					//lists all above commands

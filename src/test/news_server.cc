@@ -2,8 +2,11 @@
 
 using namespace std;
 
-NewsServer::NewsServer(bool b) {
-	if (b)
+NewsServer::NewsServer(bool in_memory) {
+	//controller is put on heap, since the program does not know
+	//wheter it is an in_memory controller or a disk version
+	//until runtime
+	if (in_memory)
 		controller = unique_ptr<MemServerController>(new MemServerController());
 	else
 		controller = unique_ptr<DiskServerController>(new DiskServerController());
@@ -52,7 +55,6 @@ void NewsServer::run(Server& server) {
           break;
 
           case Protocol::COM_CREATE_ART:
-          cout << "creating article" << endl;
           if (conn->read() == Protocol::PAR_NUM) {
             unsigned int id = controller->read_number();
             string title;
@@ -96,7 +98,7 @@ void NewsServer::run(Server& server) {
           break;
 
           case Protocol::COM_GET_ART:
-          unsigned int news_group_id; //redefinition if ng_id? wtf
+          unsigned int news_group_id;
           unsigned int article_id;
           if (conn->read() == Protocol::PAR_NUM) {
             news_group_id = controller->read_number();
@@ -145,14 +147,20 @@ int main(int argc, char* argv[]){
 	cout << "press 1 for in memory version, 2 for disk version" << endl;
 	string answer;
 	cin >> answer;
-	int result = stoi(answer);
 
-	if (result == 1) {
-		NewsServer news_server(true);
-		news_server.run(server);
-	} else if (result == 2) {
-		NewsServer news_server(false);
-		news_server.run(server);
+	try {
+		int result = stoi(answer);
+		if (result == 1) {
+			NewsServer news_server(true);
+			news_server.run(server);
+		} else if (result == 2) {
+			NewsServer news_server(false);
+			news_server.run(server);
+		} else {
+			cout << "neither 1 or 2 was pressed" << endl;
+		}
+	} catch (std::invalid_argument) {
+		cerr << "must enter an integer. Exiting..." << endl;
+		exit(1);
 	}
-
 }
