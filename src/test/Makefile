@@ -8,7 +8,7 @@ CC  = g++
 # if you use clang++ and wish to use libc++ instead of libstd++.
 CPPFLAGS  = -std=c++11 -I..
 CXXFLAGS  = -g -O2 -Wall -W -pedantic-errors
-CXXFLAGS += -Wmissing-braces -Wparentheses -Wold-style-cast 
+CXXFLAGS += -Wmissing-braces -Wparentheses -Wold-style-cast
 CXXFLAGS += -std=c++11
 LDFLAGS   = -g -L..
 #CPPFLAGS += -stdlib=libc++
@@ -35,8 +35,8 @@ news_client: news_client.o client_controller.o controller.o
 clean:
 	rm -f *.o $(PROGS)
 
-install: 
-	cp $(PROGS) ../../bin/
+install:
+	cp $(PROGS) TestServer1.jar TestServer2.jar ../../bin/
 
 # Generate dependencies in *.d files
 %.d: %.cc
