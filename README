@@ -42,3 +42,27 @@ ra 1 2					//reads the title, author and text from
 					//article with id: 2 and newsgroup with id: 1
 
 help					//lists all above commands
+
+
+
+
+Pattern of the newsgroup info file:
+<number of newsgroups>
+<current ng_id>
+<ng_name> <ng_id>
+<ng_name> <ng_id>
+<ng_name> <ng_id>
+...
+
+
+Pattern of the article info file:
+<number of articles>
+<current art_id>
+<art_name> <art_id>
+<art_name> <art_id>
+<art_name> <art_id>
+...
+
+
+
+
