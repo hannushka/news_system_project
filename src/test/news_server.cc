@@ -24,18 +24,29 @@ void NewsServer::run(Server& server) {
 					case Protocol::COM_LIST_NG:
           if (conn->read() == Protocol::COM_END)
             controller->list_newsgroups();
+					else {
+						cout << "server disconnected client" << endl;
+						server.deregisterConnection(conn);
+					}
           break;
 
           case Protocol::COM_CREATE_NG:
           c = conn->read();
-          if (c == Protocol::PAR_STRING) { //always true?
+          if (c == Protocol::PAR_STRING) {
             int nbr_chars = controller->read_number();
             string msg;
             for (int i = 0; i != nbr_chars; ++i)
               msg += conn->read();
             if (conn->read() == Protocol::COM_END)
               controller->create_newsgroup(msg);
-          }
+						else {
+							cout << "server disconnected client" << endl;
+							server.deregisterConnection(conn);
+						}
+          } else {
+						cout << "server disconnected client" << endl;
+						server.deregisterConnection(conn);
+					}
 					break;
 
           case Protocol::COM_DELETE_NG:
@@ -43,7 +54,14 @@ void NewsServer::run(Server& server) {
             unsigned int id = controller->read_number();
             if (conn->read() == Protocol::COM_END)
               controller->delete_newsgroup(id);
-          }
+						else {
+							cout << "server disconnected client" << endl;
+							server.deregisterConnection(conn);
+						}
+          } else {
+						cout << "server disconnected client" << endl;
+						server.deregisterConnection(conn);
+					}
           break;
 
           case Protocol::COM_LIST_ART:
@@ -51,7 +69,14 @@ void NewsServer::run(Server& server) {
             unsigned int id = controller->read_number();
             if (conn->read() == Protocol::COM_END)
               controller->list_articles(id);
-          }
+						else {
+							cout << "server disconnected client" << endl;
+							server.deregisterConnection(conn);
+						}
+          } else {
+						cout << "server disconnected client" << endl;
+						server.deregisterConnection(conn);
+					}
           break;
 
           case Protocol::COM_CREATE_ART:
@@ -64,23 +89,39 @@ void NewsServer::run(Server& server) {
               int nbr_chars = controller->read_number();
               for (int i = 0; i != nbr_chars; ++i)
                 title += conn->read();
-            }
+            } else {
+							cout << "server disconnected client" << endl;
+							server.deregisterConnection(conn);
+						}
 
             if (conn->read() == Protocol::PAR_STRING) {
               int nbr_chars = controller->read_number();
               for (int i = 0; i != nbr_chars; ++i)
                 author += conn->read();
-            }
+            } else {
+							cout << "server disconnected client" << endl;
+							server.deregisterConnection(conn);
+						}
 
             if (conn->read() == Protocol::PAR_STRING) {
               int nbr_chars = controller->read_number();
               for (int i = 0; i != nbr_chars; ++i)
                 text += conn->read();
-            }
+            } else {
+							cout << "server disconnected client" << endl;
+							server.deregisterConnection(conn);
+						}
 
             if (conn->read() == Protocol::COM_END)
               controller->create_article(id, title, author, text);
-          }
+						else {
+							cout << "server disconnected client" << endl;
+							server.deregisterConnection(conn);
+						}
+          } else {
+						cout << "server disconnected client" << endl;
+						server.deregisterConnection(conn);
+					}
           break;
 
           case Protocol::COM_DELETE_ART:
@@ -92,9 +133,18 @@ void NewsServer::run(Server& server) {
               art_id = controller->read_number();
               if (conn->read() == Protocol::COM_END) {
                 controller->delete_article(ng_id, art_id);
-              }
-            }
-          }
+              } else {
+								cout << "server disconnected client" << endl;
+								server.deregisterConnection(conn);
+							}
+            } else {
+							cout << "server disconnected client" << endl;
+							server.deregisterConnection(conn);
+						}
+          } else {
+						cout << "server disconnected client" << endl;
+						server.deregisterConnection(conn);
+					}
           break;
 
           case Protocol::COM_GET_ART:
@@ -106,9 +156,18 @@ void NewsServer::run(Server& server) {
               article_id = controller->read_number();
               if (conn->read() == Protocol::COM_END) {
                 controller->read_article(news_group_id, article_id);
-              }
-            }
-          }
+              } else {
+								cout << "server disconnected client" << endl;
+								server.deregisterConnection(conn);
+							}
+            } else {
+							cout << "server disconnected client" << endl;
+							server.deregisterConnection(conn);
+						}
+          } else {
+						cout << "server disconnected client" << endl;
+						server.deregisterConnection(conn);
+					}
           break;
 
 				}
